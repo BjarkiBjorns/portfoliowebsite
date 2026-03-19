@@ -1,0 +1,396 @@
+/* Core Layout */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #111111;
+  overflow-x: hidden;
+}
+
+#hero-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  background-color: #f4f4f4;
+  /* Prevents text-selection cursor from appearing over the hero text */
+  user-select: none;
+  cursor: auto; /* This allows the JS to take over */
+}
+
+.hero-content *, 
+#hero-container .lander-img,
+#hero-container div {
+  cursor: inherit !important;
+}
+
+#hero-container video {
+    /* Ensures the video elements don't try to show their own 'pointer' */
+    pointer-events: none; 
+    cursor: inherit !important;
+}
+
+.hero-content {
+  z-index: 15;
+  text-align: center;
+  pointer-events: none;
+  cursor: inherit !important;
+}
+
+#random-video, #random-video2, #random-video3, #random-video4, #random-image, #random-image2, #random-image3 {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#random-video, #random-video2, #random-video3, #random-video4 { width: 250px; height: auto; }
+#random-image, #random-image2, #random-image3 { width: 150px; height: auto; }
+
+.lander-img { width: 100%; height: auto; display: block; }
+
+.navigation {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  gap: 3rem; 
+}
+
+.navigation a {
+  text-decoration: none;
+  color: #111111;
+  font-size: 1.2rem;
+  text-transform: lowercase;
+  transition: all 0.2s ease;
+  cursor: pointer !important;
+}
+
+.navigation a:hover { font-style: italic; }
+
+#work { position: relative; z-index: 5; }
+
+h1, h2 { font-size: 14pt; margin: 0; }
+h2 { line-height: 0; }
+h3, p2 { font-size: 10pt; margin: 0; line-height: 3; font-style: italic; }
+p2 { color: #b4b4b4; }
+p3 { font-size: 10pt; margin: 0; line-height: 0; font-style: italic;}
+
+/* --- Project Logic --- */
+
+.project {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-bottom: 10rem;
+  min-height: 600px;
+  text-align: center;
+  overflow: visible;
+}
+
+.project-info {
+  position: absolute;
+  z-index: 1001;
+  width: 250px; 
+  pointer-events: auto;
+  transition: none !important;
+  box-shadow: 3px 2px 7px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f4f4f4; /* Standard background for text/standard images */
+}
+
+/* Specific Override for SOAF Photos to remove empty side space */
+.custom-soaf-photo .project-info {
+  width: fit-content !important;
+  min-width: 0 !important;
+  background-color: transparent !important; /* Removes box bleed around image */
+  padding: 0 !important;
+  line-height: 0; /* Removes bottom ghost gap */
+}
+
+.custom-soaf-photo img {
+  width: 12vw !important; /* Controls the size of the scattered photos */
+  height: auto !important;
+  margin: 0 !important;
+  display: block;
+}
+
+.project-info.hidden {
+  display: none;
+}
+
+.project h2, .project .project-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.project p {
+  line-height: 1.5;
+  font-size: 10pt;
+  z-index: 1002;
+}
+
+.project img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* --- Media Players --- */
+
+.audio-player-position {
+  width: 300px;
+}
+
+.video-shown {
+  width: 100%; 
+  height: auto;
+  display: block;
+}
+
+.custom-size-video { width: 280px; height: auto; }
+
+/* --- Text & Layout Elements --- */
+
+.project-info-text { 
+  min-width: 15rem; 
+  height: auto; 
+  padding: 10px; 
+  background-color: #f4f4f4; /* Ensures text has a solid box for shadow */
+  z-index: 1002;
+}
+
+.project-info-text p { 
+  margin: 0; 
+  padding: 0; 
+}
+
+.project-image { 
+  max-width: 600px; 
+  height: auto; 
+  cursor: pointer; 
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.1);
+}
+
+.project-content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.spnr-text-position { top: 35%; left: 125%; text-align: left; }
+.playlist-link-position { top: 55%; left: 125%;}
+.spnr-video-position { top: 49%; left: -39%;}
+
+.concept-line {
+  border: none;
+  border-top: 1px solid #7a7a7a;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+/* --- Info & Canvas Section --- */
+
+#info {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.info-content { z-index: 15; width: 40rem; font-size: 10pt; cursor: inherit !important;}
+.info-content *{cursor: inherit !important;}
+
+
+#p5-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  border-top: 1px solid #7a7a7a;
+  border-bottom: 1px solid #7a7a7a;
+}
+
+.info-image { width: 11rem; height: auto; margin-bottom: 2rem; cursor: inherit !important;}
+
+footer {
+  text-align: right;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  padding: 1rem 2rem;
+  pointer-events: none; 
+  z-index: 40;
+  font-size: 0.6rem;
+}
+
+footer p, footer a { pointer-events: auto; }
+
+.hidden { display: none !important;}
+
+/* Ensure the "video-images" look and act like images in the layout */
+.image-video-lightbox-fix {
+  cursor: zoom-in;
+  pointer-events: auto !important; /* Overrides the global video pointer-events: none */
+  object-fit: cover;
+}
+
+/* Lightbox Content Styling */
+.lightbox-content {
+  max-width: 90%;
+  max-height: 85vh;
+  width: auto;
+  height: auto;
+  box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+  user-select: none;
+  display: block;
+}
+
+/* Hide the placeholder image tag when a video is active */
+.lightbox-content.hidden {
+  display: none;
+}
+
+#lightbox {
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(244, 244, 244, 0.98);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+  transition: opacity 0.3s ease;
+}
+
+/* Ensure the SoundCloud player fits nicely in your project boxes */
+.project-info iframe {
+  border: none;
+  display: block;
+  box-shadow: 3px 2px 7px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* --- YouTube Link Box Customization --- */
+
+.yt-link-wrapper {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden; /* Keeps everything inside the box */
+  background-color: #000; /* Backdrop for the image */
+}
+
+/* The Thumbnail Image */
+.yt-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(20%); /* Optional: subtle desaturation to match your vibe */
+  transition: transform 0.5s ease, filter 0.3s ease;
+}
+
+/* The Dark Overlay + Play Button Container */
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Dims the image slightly */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+/* The "▶" Icon */
+.play-icon {
+  color: #f4f4f4; /* Using your site's light gray */
+  font-size: 50px;
+  opacity: 0.9;
+  transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy feel */
+  user-select: none;
+}
+
+/* --- Hover States --- */
+
+.yt-link-wrapper:hover .yt-thumb {
+  transform: scale(1.01); /* Slight zoom in */
+  filter: grayscale(0%);  /* Pop back to full color */
+}
+
+.yt-link-wrapper:hover .play-overlay {
+  background: rgba(0, 0, 0, 0.1); /* Brighten the whole box */
+}
+
+.yt-link-wrapper:hover .play-icon {
+  transform: scale(1.03); /* Make the play button grow */
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  opacity: 0.2; /* Makes the text easier to read */
+  filter: blur(2px);
+}
+
+/* Ensure the scatter logic doesn't add weird gaps */
+.project-info:has(.yt-link-wrapper) {
+  padding: 0 !important;
+  line-height: 0;
+}
+
+/* Container must be relative so the text can be absolute to it */
+.video-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 1. Style the text position and initial state */
+.video-container p {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Precise centering trick */
+  
+  width: 90%; /* Keep text from hitting the edges */
+  margin: 0;
+  z-index: 10; /* Ensure it stays above the play icon */
+  
+  /* Styling to make it readable over an image */
+  color: #f4f4f4; 
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+  
+  /* Hidden state */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* Allows clicks to pass through to the link */
+}
+
+/* 2. Show the text on hover */
+.yt-link-wrapper:hover p {
+  opacity: 1;
+}
