@@ -1,28 +1,30 @@
-// Global tracking for movement thresholds
+// --- 1. GLOBAL TRACKING & INITIAL MOUSE MOVEMENT ---
+// We define these at the very top so they are ready immediately
+const loaderGif = document.getElementById('moving-loader-gif');
 let heroLastX = 0, heroLastY = 0;
-let infoLastX = 0, infoLastY = 0;
 const threshold = 5;
-const moveThreshold = 5;
 let heroIsPaused = false;
 
-// --- 1. ELEMENT RANDOMIZERS & SORTING ---
+// Global mouse tracker (for the GIF cursor)
+window.addEventListener('mousemove', (e) => {
+  if (loaderGif) {
+    loaderGif.style.left = e.clientX + 'px';
+    loaderGif.style.top = e.clientY + 'px';
+  }
+});
 
-/**
- * Sorts projects within their parent sections based on data-date="YYYY-MM-DD"
- */
+// --- 2. ELEMENT RANDOMIZERS & SORTING ---
+
 function sortProjectsByDate() {
   const sections = document.querySelectorAll('#work, #concept, #music');
-  
   sections.forEach(section => {
     const projects = Array.from(section.querySelectorAll('.project'));
     if (projects.length === 0) return;
-
     projects.sort((a, b) => {
       const dateA = new Date(a.getAttribute('data-date') || '1970-01-01');
       const dateB = new Date(b.getAttribute('data-date') || '1970-01-01');
       return dateB - dateA; 
     });
-
     projects.forEach(project => section.appendChild(project));
   });
 }
@@ -43,18 +45,19 @@ function initAllElements() {
   heroIds.forEach(id => randomizeElement('hero-container', id));
 }
 
-// --- 2. HERO INTERACTION ---
+// --- 3. HERO INTERACTION ---
 
-const heroContainer = document.getElementById('hero-container');
+function setupHeroInteraction() {
+  const heroContainer = document.getElementById('hero-container');
+  if (!heroContainer) return;
 
-if (heroContainer) {
   const cursorPlaying = "url('cursors/play1.png'), auto"; 
   const cursorPaused = "url('cursors/pause1.png'), auto";
-
   heroContainer.style.cursor = cursorPlaying;
 
   heroContainer.addEventListener('mousemove', (e) => {
     if (heroIsPaused) return;
+
     if (Math.abs(e.pageX - heroLastX) > threshold || Math.abs(e.pageY - heroLastY) > threshold) {
       initAllElements();
       heroLastX = e.pageX; 
@@ -62,14 +65,23 @@ if (heroContainer) {
     }
   });
 
-  heroContainer.addEventListener('click', (e) => {
-    if (e.target.tagName === 'A') return;
-    heroIsPaused = !heroIsPaused;
-    heroContainer.style.cursor = heroIsPaused ? cursorPaused : cursorPlaying;
-  });
+heroContainer.addEventListener('click', (e) => {
+  if (e.target.tagName === 'A') return;
+  heroIsPaused = !heroIsPaused;
+  
+  const currentCursor = heroIsPaused ? cursorPaused : cursorPlaying;
+  heroContainer.style.cursor = currentCursor;
+
+  // NEW: Tell p5 to update its cursor too!
+  if (window.myP5) {
+    window.myP5.cursor(currentCursor);
+    if (heroIsPaused) window.myP5.noLoop();
+    else window.myP5.loop();
+  }
+});
 }
 
-// --- 3. PROJECT INTERACTION (Chaos, No Overlap) ---
+// --- 4. PROJECT INTERACTION (Chaos, No Overlap) ---
 
 function setupProjectInteractions() {
   document.querySelectorAll('.project').forEach(project => {
@@ -88,7 +100,6 @@ function setupProjectInteractions() {
           info.classList.remove('hidden');
           let attempts = 0;
           let foundSpot = false;
-
           while (!foundSpot && attempts < 500) {
             randomizeProjectElement(project, info);
             const overlap = placedElements.some(el => checkOverlap(info, el, 20)); 
@@ -115,168 +126,225 @@ function checkOverlap(el1, el2, buffer = 0) {
 }
 
 function randomizeProjectElement(projectDiv, el) {
+  if (window.innerWidth < 800) {
+    el.style.left = '0px';
+    el.style.top = '0px';
+    return;
+  }
   const margin = 50; 
   const parentW = projectDiv.offsetWidth;
   const parentH = projectDiv.offsetHeight;
   const elW = el.offsetWidth || 180; 
   const elH = el.offsetHeight || 150;
-
   const maxX = Math.max(0, parentW - elW - (margin * 2));
   const maxY = Math.max(0, parentH - elH - (margin * 2));
-
   el.style.left = `${Math.floor(Math.random() * maxX) + margin}px`;
   el.style.top = `${Math.floor(Math.random() * maxY) + margin}px`;
 }
 
-// --- 4. LIGHTBOX FUNCTIONALITY ---
+// --- 5. LIGHTBOX & CAROUSEL SYNC ---
 
 function setupLightbox() {
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   if (!lightbox || !lightboxImg) return;
 
-  // Listen for clicks
+  let activeCarousel = null;
+
   document.addEventListener('click', (e) => {
     const el = e.target;
     
-    // Check if it's a standard image OR a video with your specific fix class
-    const isProjectImage = el.tagName === 'IMG' && el.closest('.project-info');
-    const isProjectVideo = el.classList.contains('image-video-lightbox-fix') && el.closest('.project-info');
+    // Stop propagation if clicking inside project info to prevent chaos reshuffle
+    if (el.closest('.project-info')) e.stopPropagation();
     
-    if (isProjectImage || isProjectVideo) {
-      // Clear previous content
-      lightbox.querySelectorAll('.lightbox-content').forEach(child => {
-        if (child.id !== 'lightbox-img') child.remove();
-      });
+    // 1. FULLSCREEN BUTTON
+    if (el.classList.contains('fullscreen-btn')) {
+      activeCarousel = el.closest('.carousel-container');
+      const activeImg = activeCarousel.querySelector('img.active') || activeCarousel.querySelector('img[style*="block"]');
+      if (activeImg) openLightbox(activeImg);
+      return;
+    }
 
-      if (isProjectImage) {
-        lightboxImg.src = el.src;
-        lightboxImg.classList.remove('hidden');
-      } else if (isProjectVideo) {
-        lightboxImg.classList.add('hidden'); // Hide the image tag
-        
-        // Create a video element for the lightbox
-        const lbVideo = document.createElement('video');
-        lbVideo.src = el.querySelector('source') ? el.querySelector('source').src : el.src;
-        lbVideo.autoplay = true;
-        lbVideo.loop = true;
-        lbVideo.muted = true;
-        lbVideo.playsInline = true;
-        lbVideo.classList.add('lightbox-content');
-        lightbox.appendChild(lbVideo);
+    // 2. LIGHTBOX IMAGE CLICK (Carousel Sync)
+    if (!lightbox.classList.contains('hidden') && el.id === 'lightbox-img' && activeCarousel) {
+      const slides = Array.from(activeCarousel.querySelectorAll('.carousel-slides img'));
+      let currentIndex = slides.findIndex(img => img.classList.contains('active') || img.style.display === 'block');
+      
+      slides[currentIndex].classList.remove('active');
+      slides[currentIndex].style.display = 'none';
+      
+      currentIndex = (currentIndex + 1) % slides.length;
+      const nextImg = slides[currentIndex];
+      
+      nextImg.classList.add('active');
+      nextImg.style.display = 'block';
+      
+      // Update the Lightbox view to match the new slide
+      lightboxImg.src = nextImg.src; 
+      return;
+    }
+
+    // 3. ON-PAGE CAROUSEL CLICK
+    const carouselContainer = el.closest('.carousel-container');
+    if (carouselContainer && el.tagName === 'IMG' && !el.classList.contains('fullscreen-btn')) {
+        const slides = Array.from(carouselContainer.querySelectorAll('.carousel-slides img'));
+        let currentIndex = slides.findIndex(img => img.classList.contains('active') || img.style.display === 'block');
+        slides[currentIndex].classList.remove('active');
+        slides[currentIndex].style.display = 'none';
+        currentIndex = (currentIndex + 1) % slides.length;
+        slides[currentIndex].classList.add('active');
+        slides[currentIndex].style.display = 'block';
+        return;
+    }
+
+    // 4. OPEN LIGHTBOX (Standard Images/Videos)
+    const isProjectInfoChild = el.closest('.project-info');
+    if (isProjectInfoChild && !carouselContainer) {
+      if (el.tagName === 'IMG' || el.classList.contains('image-video-lightbox-fix')) {
+        activeCarousel = null; 
+        openLightbox(el);
       }
-
-      lightbox.classList.remove('hidden');
-      document.body.style.overflow = 'hidden'; 
     }
   });
 
+  function openLightbox(el) {
+    const oldVid = lightbox.querySelector('video');
+    if (oldVid) oldVid.remove();
+
+    if (el.tagName === 'IMG') {
+      lightboxImg.src = el.src; // CRITICAL: This sets the image
+      lightboxImg.classList.remove('hidden');
+    } else {
+      lightboxImg.classList.add('hidden');
+      const lbVideo = document.createElement('video');
+      lbVideo.src = el.querySelector('source')?.src || el.src;
+      lbVideo.autoplay = lbVideo.loop = lbVideo.muted = lbVideo.playsInline = true;
+      lbVideo.classList.add('lightbox-content');
+      lightbox.appendChild(lbVideo);
+    }
+    
+    lightbox.classList.remove('hidden');
+    // Ensure the lightbox is scrolled to the top of its own container
+    lightbox.scrollTop = 0; 
+    document.body.style.overflow = 'hidden';
+  }
+
   lightbox.addEventListener('click', (e) => {
-    // Close if clicking the background or the close button
+    // Only close if clicking the background, not the image/video
     if (!e.target.classList.contains('lightbox-content')) {
       lightbox.classList.add('hidden');
       document.body.style.overflow = 'auto';
-      lightboxImg.src = "";
-      
-      // Remove any video elements created
-      const video = lightbox.querySelector('video');
-      if (video) video.remove();
+      activeCarousel = null;
+      lightboxImg.src = ""; // Clear source on close
     }
   });
 }
 
-// --- 5. INFO / P5 SKETCH ---
 
-const sketchSettings = {
-  circleCount: 5,         
-  minSizeLimit: 100,        
-  maxSizeLimit: 1400,       
-  spread: 1,            
-  strokeWeight: 1,       
-  strokeColor: 2,        
-  fillColor: [244, 244, 244, 100], 
-  clearOnMove: false     
-};
 
-const infoContainer = document.getElementById('info');
-if (infoContainer) {
-  infoContainer.addEventListener('mousemove', (e) => {
-    const rect = infoContainer.getBoundingClientRect();
-    const currentX = e.clientX - rect.left;
-    const currentY = e.clientY - rect.top;
-    
-    if (Math.abs(currentX - infoLastX) > moveThreshold || Math.abs(currentY - infoLastY) > moveThreshold) {
-      infoLastX = currentX;
-      infoLastY = currentY;
-    }
-  });
-}
-
-const sketch = (p) => {
-  const cursorPlaying = "url('cursors/play1.png'), auto";
-  const cursorPaused = "url('cursors/pause1.png'), auto";
-
-  p.setup = () => {
-    let container = document.getElementById('info');
-    if (container) {
-      let canvas = p.createCanvas(container.clientWidth, container.clientHeight);
-      canvas.parent('p5-canvas-container');
-      p.background(244, 0); 
-      canvas.elt.style.cursor = cursorPlaying;
-    }
-  };
-
-  p.draw = () => {
-    if (sketchSettings.clearOnMove) p.clear();
-    const centerX = p.width / 2;
-    const centerY = p.height / 2;
-    const distanceToCenter = p.dist(p.mouseX, p.mouseY, centerX, centerY);
-    const maxDist = p.dist(0, 0, centerX, centerY);
-
-    let dynamicSize = p.map(distanceToCenter, 0, maxDist, sketchSettings.maxSizeLimit, sketchSettings.minSizeLimit);
-    dynamicSize = p.max(dynamicSize, sketchSettings.minSizeLimit);
-
-    let variationFactor = p.map(distanceToCenter, 0, maxDist, 0.98, 0.7);
-
-    p.stroke(sketchSettings.strokeColor);
-    p.strokeWeight(sketchSettings.strokeWeight);
-    const f = sketchSettings.fillColor;
-    p.fill(f[0], f[1], f[2], f[3]);
-
-    for (let i = 0; i < sketchSettings.circleCount; i++) {
-      const xOffset = p.random(-sketchSettings.spread, sketchSettings.spread);
-      const yOffset = p.random(-sketchSettings.spread, sketchSettings.spread);
-      const finalSize = p.random(dynamicSize * variationFactor, dynamicSize);
-      p.circle(p.mouseX + xOffset, p.mouseY + yOffset, finalSize);
-    }
-  };
-
-  p.mousePressed = () => {
-    if (p.mouseX > 0 && p.mouseX < p.width && p.mouseY > 0 && p.mouseY < p.height) {
-      if (p.isLooping()) {
-        p.noLoop();
-        p.cursor(cursorPaused);
-      } else {
-        p.loop();
-        p.cursor(cursorPlaying);
-      }
-    }
-  };
-
-  p.windowResized = () => {
-    let container = document.getElementById('info');
-    if (container) {
-      p.resizeCanvas(container.clientWidth, container.clientHeight);
-    }
-  };
-};
-
-// --- 6. INITIALIZE ---
+// --- 7. INITIALIZE ---
 
 window.addEventListener('load', () => {
+  console.log("Assets loaded.");
+  
+  // 1. Setup all interaction logic
   sortProjectsByDate(); 
   initAllElements(); 
+  setupHeroInteraction(); // <--- ADD THIS LINE
   setupProjectInteractions(); 
-  setupLightbox(); // Initialize Lightbox
-  new p5(sketch);
+  setupLightbox(); 
+  
+  if (typeof p5 !== 'undefined') new p5(sketch);
+
+  // 2. Hide the loader
+  const loader = document.getElementById('loading-screen');
+  if (loader) {
+    loader.classList.add('hidden-loader');
+  }
+});
+
+// --- 3D LAB PORTAL LOGIC ---
+const portal = document.getElementById('lab-portal');
+let portalTimer;
+let isAtBottom = false;
+
+window.addEventListener('scroll', () => {
+    // Only run if portal element exists
+    if (!portal) return;
+
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrollPercent = (scrollTop / scrollHeight) * 100;
+
+    if (scrollPercent >= 98) { // Trigger slightly early for reliability
+        if (!isAtBottom) {
+            isAtBottom = true;
+            console.log("At bottom! Starting 2-second portal timer...");
+            
+portalTimer = setTimeout(() => {
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    const viewportMiddle = window.innerHeight / 2;
+    const targetTop = currentScroll + viewportMiddle;
+
+    portal.style.top = targetTop + 'px';
+    
+    // Ensure the browser 'sees' the hidden state first
+    portal.classList.remove('float-3d');
+    
+    // FORCE REFLOW: This wakes up the Chromium rendering engine
+    void portal.offsetWidth; 
+    
+    portal.classList.remove('exit-portal'); // Clean up the exit state
+    void portal.offsetWidth;                // Force reflow
+    portal.classList.add('float-3d');       // Swoop in!
+}, 2000);
+
+        }
+    } else {
+    // If user scrolls up
+    if (isAtBottom) {
+        isAtBottom = false;
+        console.log("Scrolled up, initiating exit...");
+        
+        // 1. Cancel the entrance timer in case it hasn't fired yet
+        clearTimeout(portalTimer);
+        
+        // 2. If the portal is currently visible, make it exit
+        if (portal.classList.contains('float-3d')) {
+            portal.classList.remove('float-3d');
+            portal.classList.add('exit-portal');
+            
+            // Optional: Completely hide it after the animation finishes (2s)
+            setTimeout(() => {
+                if (!isAtBottom) portal.classList.remove('exit-portal');
+            }, 2000);
+        }
+    }
+}
+});
+
+// --- COMBINED MOUSE LOGIC ---
+// We use the existing mousemove listener at the top of your script or add this one:
+window.addEventListener('mousemove', (e) => {
+    // 1. Move the loader GIF (Existing logic)
+    if (loaderGif) {
+        loaderGif.style.left = e.clientX + 'px';
+        loaderGif.style.top = e.clientY + 'px';
+    }
+
+    // 2. Move the Portal (The Magic Float)
+    if (portal && portal.classList.contains('float-3d')) {
+        const xPct = (e.clientX / window.innerWidth) - 0.5;
+        const yPct = (e.clientY / window.innerHeight) - 0.5;
+
+        const moveX = xPct * 100; // Drift amount
+        const moveY = yPct * 100;
+        const rotateY = xPct * 40; // Tilt amount
+        const rotateX = -yPct * 40;
+
+        portal.style.setProperty('--mx', `${moveX}px`);
+        portal.style.setProperty('--my', `${moveY}px`);
+        portal.style.setProperty('--rotX', `${rotateX}deg`);
+        portal.style.setProperty('--rotY', `${rotateY}deg`);
+    }
 });
