@@ -25,7 +25,7 @@
   <title>bjarki björnsson</title>
   <link rel="preload" as="image" href="cursors/icons8-iphone-spinner.gif">
   <link rel="stylesheet" href="style.css" />
-  <script src="script.js" async></script>
+
 </head>
 <body>
 
@@ -47,11 +47,6 @@
       }
     });
 
-    // Emergency exit
-    setTimeout(() => {
-      const loader = document.getElementById('loading-screen');
-      if (loader) loader.classList.add('hidden-loader');
-    }, 2000);
   </script>
 
     <div id="hero-container">
@@ -64,7 +59,7 @@
         </p2>
         </div>
 
-      <video id="random-video" fetchpriority="high" preload="auto" autoplay loop muted playsinline class="lazy-video" data-src="video/lander/compressed50_LANDER3 500kb.mp4">
+      <video id="random-video" autoplay loop muted playsinline class="lazy-video" data-src="video/lander/compressed50_LANDER3 500kb.mp4">
         <source src="" type="video/mp4">
       </video>
 
@@ -872,5 +867,6 @@
     <img class="lightbox-content" id="lightbox-img">
   </div>
 
+    <script src="script.js" defer></script>
 </body>
 </html>

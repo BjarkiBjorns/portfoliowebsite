@@ -46,7 +46,7 @@ body {
 }
 
 .hero-content {
-  z-index: 15;
+  z-index: 2001;
   text-align: center;
   pointer-events: none;
   cursor: inherit !important;
@@ -54,7 +54,7 @@ body {
 
 #random-video, #random-video2, #random-video3, #random-video4, #random-image, #random-image2, #random-image3 {
   position: absolute;
-  z-index: 10;
+  z-index: 20000;
   pointer-events: none;
 }
 
