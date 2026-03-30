@@ -244,13 +244,13 @@ function setupLightbox() {
 
 // --- 7. INITIALIZE ---
 
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
   console.log("Assets loaded.");
   
   // 1. Setup all interaction logic
   sortProjectsByDate(); 
   initAllElements(); 
-  setupHeroInteraction(); // <--- ADD THIS LINE
+  setupHeroInteraction();
   setupProjectInteractions(); 
   setupLightbox(); 
   

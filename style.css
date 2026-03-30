@@ -16,7 +16,7 @@ body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: #f4f4f4;
   color: #111111;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #hero-container {
@@ -526,7 +526,7 @@ footer p, footer a { pointer-events: auto; }
   left: 0;
   width: 100vw;   /* 100% of Viewport Width */
   height: 100vh;  /* 100% of Viewport Height */
-  background: #ffffff; /* Make sure this isn't transparent! */
+  background: #f4f4f4; /* Make sure this isn't transparent! */
   display: flex;
   flex-direction: column;
   align-items: center;
