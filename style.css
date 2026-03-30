@@ -19,6 +19,20 @@ body {
   overflow: hidden;
 }
 
+/* Target all elements that are inherently "clickable" */
+a, 
+button, 
+[role="button"],
+input[type="submit"], 
+input[type="button"], 
+input[type="reset"], 
+summary,
+.clickable-class {
+  /* Replace 'custom-hand.png' with your file path */
+  /* The 'pointer' at the end is the fallback if the image fails */
+  cursor: url('cursors/clickcursor.webp'), pointer;
+}
+
 #hero-container {
   position: relative;
   width: 100%;
@@ -143,6 +157,7 @@ p3 { font-size: 10pt; margin: 0; line-height: 0; font-style: italic;}
 .project h2, .project .project-content {
   max-width: 600px;
   margin: 0 auto;
+  cursor: url('cursors/clickcursor.webp'), !important;
 }
 
 .project p {
@@ -277,107 +292,6 @@ footer p, footer a { pointer-events: auto; }
 
 .hidden { display: none !important;}
 
-/* Ensure the "video-images" look and act like images in the layout */
-.image-video-lightbox-fix {
-  cursor: zoom-in;
-  pointer-events: auto !important; /* Overrides the global video pointer-events: none */
-  object-fit: cover;
-}
-
-#lightbox {
-  position: fixed !important; /* Force it to stay on the screen */
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  
-  /* Modern "Glass" effect */
-  background-color: rgba(244, 244, 244, 0.92);
-  backdrop-filter: blur(10px); 
-  -webkit-backdrop-filter: blur(10px);
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
-  /* Layering: Higher than everything (Hero, Projects, Navigation) */
-  z-index: 999999; 
-  
-  cursor: zoom-out;
-  transition: opacity 0.3s ease;
-  visibility: visible;
-}
-
-/* Lightbox Content Styling */
-.lightbox-content {
-  max-width: 90vw;
-  max-height: 85vh;
-  width: auto;
-  height: auto;
-  object-fit: contain; /* Prevents cropping */
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-  user-select: none;
-  display: block;
-  z-index: 1000000;
-  cursor: pointer;
-}
-
-#lightbox img.lightbox-content {
-  max-width: 90vw;
-  max-height: 85vh;
-}
-
-#lightbox video.lightbox-content {
-  max-width: 90vw;
-  max-height: 85vh;
-  width: auto;
-  height: auto;
-}
-
-/* Hide when not active */
-#lightbox.hidden {
-  display: none !important;
-  pointer-events: none;
-}
-
-/* Close Button */
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  font-size: 32px;
-  font-weight: bold;
-  color: #111;
-  background: rgba(244, 244, 244, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000001;
-  transition: all 0.2s ease;
-}
-
-.lightbox-close:hover {
-  background: #fff;
-  transform: rotate(90deg) scale(1.1);
-}
-
-/* Custom cursor for the big image in the Lightbox when it's a carousel */
-#lightbox.active-carousel #lightbox-img {
-  cursor: url('cursors/play1.png'), w-resize !important;
-}
-
-#lightbox:not(.hidden) {
-    display: flex !important;
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999999 !important; /* Move it even higher */
-}
 
 /* Ensure the SoundCloud player fits nicely in your project boxes */
 .project-info iframe {
@@ -505,7 +419,7 @@ footer p, footer a { pointer-events: auto; }
 
 /* Custom cursor for the small carousel on the page */
 .carousel-container img {
-  cursor: url('cursors/play1.png'), w-resize !important;
+  cursor: url('cursors/carouselcursor.webp'), w-resize !important;
 }
 
 /* Keep the expand button as a pointer */
@@ -706,7 +620,7 @@ footer p, footer a { pointer-events: auto; }
     border: 1px solid rgba(255,255,255,0.2);
 
     will-change: transform, filter;
-    filter: drop-shadow(5px 4px 15px black);
+    
     /* This forces the GPU to treat it as a 3D layer even when it's not moving */
     transform: translateZ(0); 
     

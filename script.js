@@ -55,7 +55,7 @@ function setupHeroInteraction() {
   const cursorPaused = "url('cursors/pauseblend1.webp'), auto";
   heroContainer.style.cursor = cursorPlaying;
 
-  heroContainer.addEventListener('mousemove', (e) => {
+  const handleMouseMove = (e) => {
     if (heroIsPaused) return;
 
     if (Math.abs(e.pageX - heroLastX) > threshold || Math.abs(e.pageY - heroLastY) > threshold) {
@@ -63,22 +63,23 @@ function setupHeroInteraction() {
       heroLastX = e.pageX; 
       heroLastY = e.pageY;
     }
+  };
+
+  heroContainer.addEventListener('mouseenter', () => {
+    heroContainer.addEventListener('mousemove', handleMouseMove);
   });
 
-heroContainer.addEventListener('click', (e) => {
-  if (e.target.tagName === 'A') return;
-  heroIsPaused = !heroIsPaused;
-  
-  const currentCursor = heroIsPaused ? cursorPaused : cursorPlaying;
-  heroContainer.style.cursor = currentCursor;
+  heroContainer.addEventListener('mouseleave', () => {
+    heroContainer.removeEventListener('mousemove', handleMouseMove);
+  });
 
-  // NEW: Tell p5 to update its cursor too!
-  if (window.myP5) {
-    window.myP5.cursor(currentCursor);
-    if (heroIsPaused) window.myP5.noLoop();
-    else window.myP5.loop();
-  }
-});
+  heroContainer.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') return;
+    heroIsPaused = !heroIsPaused;
+    
+    const currentCursor = heroIsPaused ? cursorPaused : cursorPlaying;
+    heroContainer.style.cursor = currentCursor;
+  });
 }
 
 // --- 4. PROJECT INTERACTION (Chaos, No Overlap) ---
@@ -166,150 +167,7 @@ function setupCarousel() {
   });
 }
 
-// --- 6. NEW LIGHTBOX IMPLEMENTATION ---
 
-function setupNewLightbox() {
-  const lightbox = document.getElementById('lightbox');
-  if (!lightbox) return;
-
-  let activeCarousel = null;
-  let activeElement = null;
-
-  document.addEventListener('click', (e) => {
-    const el = e.target;
-
-    // Stop propagation if clicking inside project info to prevent chaos reshuffle
-    if (el.closest('.project-info')) e.stopPropagation();
-    
-    // Stop propagation if clicking inside lightbox to prevent interference
-    if (el.closest('#lightbox')) e.stopPropagation();
-
-    // Fullscreen button opens lightbox
-    if (el.classList.contains('fullscreen-btn')) {
-      activeCarousel = el.closest('.carousel-container');
-      const activeImg = activeCarousel.querySelector('img.active') || activeCarousel.querySelector('img[style*="block"]');
-      if (activeImg) openLightbox(activeImg);
-      return;
-    }
-
-    // Clickable images/videos in project-info (but not carousels)
-    const isProjectInfoChild = el.closest('.project-info');
-    const carouselContainer = el.closest('.carousel-container');
-    if (isProjectInfoChild && !carouselContainer) {
-      if (el.tagName === 'IMG' || el.classList.contains('image-video-lightbox-fix')) {
-        activeCarousel = null;
-        activeElement = el;
-        openLightbox(el);
-      }
-    }
-
-    // Clicking lightbox image cycles to next carousel slide (if in carousel mode)
-    if (!lightbox.classList.contains('hidden') && activeCarousel) {
-      if (el.id === 'lightbox-img' || el.classList.contains('lightbox-content')) {
-        cycleCarouselSlide();
-      }
-    }
-  });
-
-  function openLightbox(el) {
-    // Clear old content
-    const oldVid = lightbox.querySelector('video');
-    if (oldVid) oldVid.remove();
-    const oldImg = lightbox.querySelector('img#lightbox-img');
-    if (oldImg) oldImg.remove();
-
-    // Add new content
-    if (el.tagName === 'IMG') {
-      const img = document.createElement('img');
-      img.id = 'lightbox-img';
-      img.src = el.src;
-      img.classList.add('lightbox-content');
-      lightbox.appendChild(img);
-    } else if (el.tagName === 'VIDEO' || el.classList.contains('image-video-lightbox-fix')) {
-      const video = document.createElement('video');
-      video.id = 'lightbox-vid';
-      video.autoplay = true;
-      video.loop = true;
-      video.muted = true;
-      video.playsInline = true;
-      video.classList.add('lightbox-content');
-      
-      // Get source from the element
-      const sourceEl = el.querySelector('source');
-      if (sourceEl && sourceEl.src) {
-        video.src = sourceEl.src;
-      } else if (el.src) {
-        video.src = el.src;
-      } else if (el.dataset.src) {
-        video.src = el.dataset.src;
-      }
-      
-      lightbox.appendChild(video);
-    }
-
-    lightbox.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function cycleCarouselSlide() {
-    if (!activeCarousel) return;
-    
-    const slides = Array.from(activeCarousel.querySelectorAll('.carousel-slides img'));
-    let currentIndex = slides.findIndex(img => img.classList.contains('active') || img.style.display === 'block');
-    
-    slides[currentIndex].classList.remove('active');
-    slides[currentIndex].style.display = 'none';
-    
-    currentIndex = (currentIndex + 1) % slides.length;
-    const nextImg = slides[currentIndex];
-    
-    nextImg.classList.add('active');
-    nextImg.style.display = 'block';
-    
-    // Update lightbox to show new image
-    const lightboxImg = lightbox.querySelector('#lightbox-img');
-    if (lightboxImg) {
-      lightboxImg.src = nextImg.src;
-    }
-  }
-
-  // Handle lightbox interactions
-  lightbox.addEventListener('click', (e) => {
-    const isContent = e.target.classList.contains('lightbox-content');
-    const isCloseButton = e.target.classList.contains('lightbox-close');
-    
-    // Close button or clicking background (not content)
-    if (isCloseButton || (!isContent && !e.target.closest('.lightbox-content'))) {
-      closeLightbox();
-      return;
-    }
-    
-    // Clicking content (image/video) in carousel mode - advance slide
-    if (isContent && activeCarousel) {
-      cycleCarouselSlide();
-    }
-  });
-
-  function closeLightbox() {
-    lightbox.classList.add('hidden');
-    document.body.style.overflow = 'auto';
-    activeCarousel = null;
-    activeElement = null;
-    
-    // Clear content
-    const oldVid = lightbox.querySelector('video');
-    if (oldVid) oldVid.remove();
-    const oldImg = lightbox.querySelector('img#lightbox-img');
-    if (oldImg) oldImg.remove();
-  }
-
-  // Close on ESC key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
-      closeLightbox();
-    }
-  });
-}
 
 
 
@@ -324,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupHeroInteraction();
   setupProjectInteractions(); 
   setupCarousel();
-  setupNewLightbox();
   
   if (typeof p5 !== 'undefined') new p5(sketch);
 

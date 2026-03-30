@@ -40,6 +40,7 @@
     // Attach to 'window' so it's a global reference, not a local 'const'
     window.myLoaderGif = document.getElementById('moving-loader-gif');
     
+    // Loader gif follows mouse globally (always active)
     window.addEventListener('mousemove', (e) => {
       if (window.myLoaderGif) {
         window.myLoaderGif.style.left = e.clientX + 'px';
@@ -109,11 +110,16 @@
     
     // Simple logic to trigger your "chaos" functions if the script.js is ready
     if (typeof initAllElements === "function") {
-       // Only run the heavy stuff if the mouse moves significantly
-       if (Math.abs(e.clientX - heroLastX) > 5) {
-         initAllElements();
-         heroLastX = e.clientX;
-       }
+      // Check if mouse is inside hero container
+      const rect = hero.getBoundingClientRect();
+      const isInsideHero = e.clientX >= rect.left && e.clientX <= rect.right &&
+                           e.clientY >= rect.top && e.clientY <= rect.bottom;
+      
+      // Only run the heavy stuff if the mouse is inside AND moves significantly
+      if (isInsideHero && Math.abs(e.clientX - heroLastX) > 5) {
+        initAllElements();
+        heroLastX = e.clientX;
+      }
     }
   });
 </script>
@@ -209,7 +215,7 @@
             <img src="images/nyt event/NE4 PLAKAT WEB2 Large.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -220,7 +226,7 @@
             <img src="images/nyt event/NE7 Double Take Insta post.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -504,7 +510,7 @@
             <img src="images/knife guy studio/10mar26/petty/_DSC7620_compressed.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -518,7 +524,7 @@
             <img src="images/knife guy studio/10mar26/large/_DSC7741_compressed.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -531,7 +537,7 @@
             <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand18.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -544,7 +550,7 @@
             <img src="images/knife guy studio/26nov23/the rest/compressed__DSC9003.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -556,7 +562,7 @@
             <img src="images/knife guy studio/10mar26/cleaver/_DSC7675 copy_compressed.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -569,7 +575,7 @@
             <img src="images/knife guy studio/10mar26/groups/_DSC7825_compressed.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -582,7 +588,7 @@
             <img src="images/knife guy studio/10mar26/b&w/_DSC7929_compressed.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -596,7 +602,7 @@
             <img src="images/knife guy studio/10mar26/breadknife/_DSC7542_compressed.webp" style="display:none;">
           </div>
           
-          <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
+
         </div>
         
       </div>
@@ -847,7 +853,7 @@
       
           <a href="lab.html" id="lab-portal">
         <div>
-            <img src="images/other/2iFb.gif" alt="Enter Lab">
+            <img src="images/other/labportal.gif" alt="Enter Lab">
         </div>
           </a>
 

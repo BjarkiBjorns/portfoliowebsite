@@ -8,8 +8,8 @@ let labSettings = {
 };
 
 const labSketch = (p) => {
-    const cursorPlaying = "url('cursors/play1.png'), auto";
-    const cursorPaused = "url('cursors/pause1.png'), auto";
+    const cursorPlaying = "url('cursors/playblend1.webp'), auto";
+    const cursorPaused = "url('cursors/pauseblend1.webp'), auto";
 
     p.setup = () => {
         let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
