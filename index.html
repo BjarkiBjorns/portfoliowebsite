@@ -36,7 +36,23 @@
       </div>
     </div>
 
+  <script>
+    // Attach to 'window' so it's a global reference, not a local 'const'
+    window.myLoaderGif = document.getElementById('moving-loader-gif');
+    
+    window.addEventListener('mousemove', (e) => {
+      if (window.myLoaderGif) {
+        window.myLoaderGif.style.left = e.clientX + 'px';
+        window.myLoaderGif.style.top = e.clientY + 'px';
+      }
+    });
 
+    // Emergency exit
+    setTimeout(() => {
+      const loader = document.getElementById('loading-screen');
+      if (loader) loader.classList.add('hidden-loader');
+    }, 5000);
+  </script>
 
     <div id="hero-container">
     
@@ -57,7 +73,7 @@
       </video>
 
       <video id="random-video3" fetchpriority="high" preload="auto" autoplay loop muted playsinline>
-        <source src="video/lander/3dbjarki2.mp4" type="video/mp4">
+        <source src="video/lander/compressed50_3dbjarki2.mp4" type="video/mp4">
       </video>
 
       <video id="random-video4" fetchpriority="high" preload="auto" autoplay loop muted playsinline>
@@ -65,15 +81,15 @@
       </video>
 
       <!-- <div id="random-image">
-          <img src="images/lander/IMG_5383.jpeg" class="lander-img" alt="Lander Image">
+          <img src="images/lander/IMG_5383.webp" class="lander-img" alt="Lander Image">
         </div> -->
 
       <div id="random-image2">
-          <img src="images/lander/IMG_5138 2.jpeg" class="lander-img" alt="Lander Image" fetchpriority="high">
+          <img src="images/lander/IMG_5138 2.webp" class="lander-img" alt="Lander Image" fetchpriority="high">
         </div>
 
       <div id="random-image3">
-          <img src="images/lander/IMG_4992 3.jpeg" class="lander-img" alt="Lander Image" fetchpriority="high">
+          <img src="images/lander/IMG_4992 3.webp" class="lander-img" alt="Lander Image" fetchpriority="high">
         </div>
 
         <div class="navigation">
@@ -84,8 +100,6 @@
 
     </div>
 
-
-    
 <script>
   // Immediate Hero Interaction
   const hero = document.getElementById('hero-container');
@@ -120,7 +134,7 @@
       <p2>2023-Ongoing</p2>
 
         <div class="project-content">
-        <img src="images/nyt event/NE logo pink small background.png" class="project-image"
+        <img src="images/nyt event/NE logo pink small background.webp" class="project-image"
         style="--img-height: 1100px;">
      </div>
 
@@ -147,48 +161,57 @@
       </div>
       
      <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/nyt event/NE2 NytEventPoster 01.12.png">
+        <img src="images/nyt event/NE2 NytEventPoster 01.12.webp">
       </div>
       
      <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/nyt event/NE8 portrett insta2.png">
+        <img src="images/nyt event/NE8 portrett insta2.webp">
       </div>
 
       <div class="project-info hidden spnr-video-position custom-size-video" style="width: 12vw;">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/nyt event/NE2 anim2.10001-0350.mp4" type="video/mp4">
+          <source src="video/nyt event/compressed50_NE2 anim2.10001-0350.mp4" type="video/mp4">
         </video>
       </div>
         
       <div class="project-info hidden spnr-video-position custom-size-video" style="width: 12vw;">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/nyt event/NE3 vid 4compressed40.mp4" type="video/mp4" preload="metadata">
+          <source src="video/nyt event/compressed50_NE3 vid 4compressed40.mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
-        
-      <div class="project-info hidden spnr-video-position custom-size-video" style="width: 12vw;">
+
+      <div class="project-info hidden" style="width: 400px; padding: 0;">
+        <a href="https://youtu.be/iKqjh4j3o0E?si=7zTYryjieG_lVXyG" target="_blank" class="yt-link-wrapper">
+          <div class="video-container">
+                    <video autoplay loop muted playsinline controls class="video-shown">
+                    <source src="video/nyt event/compressed50_NE4 LIVE GRAFIK showcaseComp35.mp4" type="video/mp4" preload="metadata">
+                  </video>
+            
+            <div class="play-overlay">
+              <span class="play-icon">▶</span>
+            </div>
+            <p>NE4 live visuals showcase</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="project-info hidden spnr-video-position custom-size-video" style="width: 12vw;" loading="lazy">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/nyt event/NE4 LIVE GRAFIK showcaseComp35.mp4" type="video/mp4" preload="metadata">
+          <source src="video/nyt event/compressed50_NE8 compressed31_ne8 instagram poster ready (higher bitrate).mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
 
       <div class="project-info hidden spnr-video-position custom-size-video" style="width: 12vw;" loading="lazy">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/nyt event/NE8 compressed31_ne8 instagram poster ready (higher bitrate).mp4" type="video/mp4" preload="metadata">
-        </video>
-      </div>
-
-      <div class="project-info hidden spnr-video-position custom-size-video" style="width: 12vw;" loading="lazy">
-        <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/nyt event/NE7 compressed32_NE7 vibe vid 4th export.mp4" type="video/mp4" preload="metadata">
+          <source src="video/nyt event/compressed50_NE7 compressed32_NE7 vibe vid 4th export.mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
 
       
       <div class="project-info hidden carousel-container" style="width: 12vw;" loading="lazy">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/nyt event/NE4 PLAKAT WEB Large.jpeg" class="active">
-            <img src="images/nyt event/NE4 PLAKAT WEB2 Large.jpeg" style="display:none;">
+            <img src="images/nyt event/NE4 PLAKAT WEB Large.webp" class="active">
+            <img src="images/nyt event/NE4 PLAKAT WEB2 Large.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -198,8 +221,8 @@
       
       <div class="project-info hidden carousel-container" style="width: 12vw;" loading="lazy">
         <div style="position: relative;"> <div class="carousel-slides">
-            <img src="images/nyt event/NE7 basement plakat DIGITAL_01.png" class="active">
-            <img src="images/nyt event/NE7 Double Take Insta post.jpg" style="display:none;">
+            <img src="images/nyt event/NE7 basement plakat DIGITAL_01.webp" class="active">
+            <img src="images/nyt event/NE7 Double Take Insta post.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -217,7 +240,7 @@
       <p2>2026</p2>
   
       <div class="project-content">
-        <img src="images/b ki bi hope series/b ki bi hope1 FINAL.jpg" class="project-image" loading="lazy"
+        <img src="images/b ki bi hope series/b ki bi hope1 FINAL.webp" class="project-image" loading="lazy"
             style="--img-height: auto;">
       </div>
   
@@ -231,20 +254,20 @@
   
       <div class="project-info hidden spnr-video-position"  style="width: 12vw;" loading="lazy">
         <video autoplay loop muted playsinline class="video-shown image-video-lightbox-fix">
-          <source src="video/b ki bi hope series/b ki bi hope1 tracklist video.mp4" type="video/mp4">
+          <source src="video/b ki bi hope series/compressed40_b ki bi hope1 tracklist video.mp4" type="video/mp4">
         </video>
       </div>
 
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/b ki bi hope series/b ki bi hope2 ss.png">
+        <img src="images/b ki bi hope series/b ki bi hope2 ss.webp">
       </div>
 
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/b ki bi hope series/b ki bi hope3 ss.png">
+        <img src="images/b ki bi hope series/b ki bi hope3 ss.webp">
       </div>
 
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/b ki bi hope series/b ki bi hope1 ss.png">
+        <img src="images/b ki bi hope series/b ki bi hope1 ss.webp">
       </div>
     </div>
 
@@ -255,7 +278,7 @@
         <p2>2024</p2>
 
         <div class="project-content">
-          <img src="images/silver on a finger/_DSC2066.JPG" class="project-image"
+          <img src="images/silver on a finger/_DSC2066.webp" class="project-image"
               style="--img-height: 1000px;">
         </div>
 
@@ -265,42 +288,42 @@
 
         <div class="project-info hidden spnr-video-position custom-size-video">
           <video autoplay loop muted playsinline controls class="video-shown">
-            <source src="video/silver on a finger/compressed_Silver on a Finger Bjarki video.mp4" type="video/mp4">
+            <source src="video/silver on a finger/compressed40_compressed_Silver on a Finger Bjarki video.mp4" type="video/mp4">
           </video>
         </div>
 
         <div class="custom-soaf-photo">
 
               <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-                <img src="images/silver on a finger/_DSC1998.JPG">
+                <img src="images/silver on a finger/_DSC1998.webp">
               </div>
 
               <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-                <img src="images/silver on a finger/_DSC2864.JPG">
+                <img src="images/silver on a finger/_DSC2864.webp">
               </div>
 
               <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-                <img src="images/silver on a finger/_DSC3039.JPG">
+                <img src="images/silver on a finger/_DSC3039.webp">
               </div>
 
               <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-                <img src="images/silver on a finger/_DSC2109.JPG">
+                <img src="images/silver on a finger/_DSC2109.webp">
               </div>
 
               <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-                <img src="images/silver on a finger/_DSC2182.JPG">
+                <img src="images/silver on a finger/_DSC2182.webp">
               </div>
 
               <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-                <img src="images/silver on a finger/_DSC2033.JPG">
+                <img src="images/silver on a finger/_DSC2033.webp">
               </div>
 
               <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-                <img src="images/silver on a finger/_DSC2444.JPG">
+                <img src="images/silver on a finger/_DSC2444.webp">
               </div>
 
               <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-                <img src="images/silver on a finger/_DSC2850.JPG">
+                <img src="images/silver on a finger/_DSC2850.webp">
               </div>
         </div>
 
@@ -313,7 +336,7 @@
       <p2>2024-2025</p2>
 
         <div class="project-content">
-        <img src="images/spacestation/000004480005.jpeg" class="project-image"
+        <img src="images/spacestation/000004480005.webp" class="project-image"
                style="--img-height: auto;">
      </div>
 
@@ -322,20 +345,20 @@
       </div>
 
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/spacestation/000004480006.jpeg">
+        <img src="images/spacestation/000004480006.webp">
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/spacestation/Leica M2 (Portra400) 4 Sumar2024 22.jpeg">
+        <img src="images/spacestation/Leica M2 (Portra400) 4 Sumar2024 22.webp">
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/spacestation/Spacestation EU tour 23.sept FINAL_01.jpeg">
+        <img src="images/spacestation/Spacestation EU tour 23.sept FINAL_01.webp">
       </div>
 
       <div class="project-info hidden spnr-video-position" style="width: 12vw;" loading="lazy">
         <video autoplay loop muted playsinline class="video-shown image-video-lightbox-fix">
-          <source src="video/spacestation/ISL SYNDROME POSTER ANIMATED FINAL.mp4" type="video/mp4">
+          <source src="video/spacestation/compressed50_ISL SYNDROME POSTER ANIMATED FINAL.mp4" type="video/mp4">
         </video>
       </div>
 
@@ -348,7 +371,7 @@
       <p2>2024</p2>
 
         <div class="project-content">
-        <img src="images/desire lines/desire lines title image copy.jpg" class="project-image"
+        <img src="images/desire lines/desire lines title image copy.webp" class="project-image"
                style="--img-height: auto;">
      </div>
 
@@ -359,32 +382,32 @@
       </div>
 
       <div class="project-info hidden spnr-video-position" style="width: 15rem;" loading="lazy">
-        <img src="images/desire lines/_DSC6150.jpeg">
+        <img src="images/desire lines/_DSC6150.webp">
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/desire lines/_DSC6185.jpg">
+        <img src="images/desire lines/_DSC6185.webp">
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/desire lines/_DSC6155.jpg">
+        <img src="images/desire lines/_DSC6155.webp">
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/desire lines/_DSC6187.jpg">
+        <img src="images/desire lines/_DSC6187.webp">
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/desire lines/_DSC6191.jpeg">
+        <img src="images/desire lines/_DSC6191.webp">
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/desire lines/_DSC6196.jpg">
+        <img src="images/desire lines/_DSC6196.webp">
       </div>
 
       <div class="project-info hidden spnr-video-position" style="width: 12vw;" preload="metadata">
         <video autoplay loop muted playsinline class="video-shown image-video-lightbox-fix">
-          <source src="video/desire lines/nr3.mp4" type="video/mp4">
+          <source src="video/desire lines/compressed40_nr3.mp4" type="video/mp4">
         </video>
       </div>
 
@@ -397,7 +420,7 @@
       <p2>2025</p2>
 
         <div class="project-content">
-        <img src="images/glasvinge/logo creation/Glasvinge Logo final.png" class="project-image"
+        <img src="images/glasvinge/logo creation/Glasvinge Logo final.webp" class="project-image"
              style="--img-height: auto;"> 
      </div>
 
@@ -408,28 +431,28 @@
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/glasvinge/Glasvinge EP1 Cover Final.jpg">
+        <img src="images/glasvinge/Glasvinge EP1 Cover Final.webp">
       </div>
       
       <div class="project-info hidden" style="width: 12vw;" loading="lazy">
-        <img src="images/glasvinge/FSM cover FINAL 3000x3000.jpg">
+        <img src="images/glasvinge/FSM cover FINAL 3000x3000.webp">
       </div>
   
       <div class="project-info hidden spnr-video-position custom-size-video" style="width: 10vw;" >
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/glasvinge/compressed40_glasvinge creation video.mp4" type="video/mp4" preload="metadata">
+          <source src="video/glasvinge/compressed50_glasvinge creation video.mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
   
       <div class="project-info hidden spnr-video-position custom-size-video" style="width: 10vw;">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/glasvinge/compressed40_Maximum Effort, Minimum Wage Teaser Final.mp4" type="video/mp4" preload="metadata">
+          <source src="video/glasvinge/compressed50_Maximum Effort, Minimum Wage Teaser Final.mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
         
       <div class="project-info hidden spnr-video-position custom-size-video-instagram" style="width: 10vw;">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/glasvinge/compressed40_FSM instagram video.mp4" type="video/mp4" preload="metadata">
+          <source src="video/glasvinge/compressed50_FSM instagram video.mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
 
@@ -443,7 +466,7 @@
       <p2>2023</p2>
 
         <div class="project-content">
-          <img src="images/knife guy studio/26nov23/the rest/compressed__DSC8351.jpeg" 
+          <img src="images/knife guy studio/26nov23/the rest/compressed__DSC8351.webp" 
                 class="project-image" 
                 style="--img-height: 1100px;"> 
                 </div>
@@ -455,35 +478,35 @@
   
       <div class="project-info hidden spnr-video-position custom-size-video" style="width: 11vw;">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/knife guy studio/22jan26/compressed_knifeguy 22jan26 VID1 exp2 .mp4" type="video/mp4" preload="metadata">
+          <source src="video/knife guy studio/22jan26/compressed50_compressed_knifeguy 22jan26 VID1 exp2 .mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
   
       <div class="project-info hidden spnr-video-position custom-size-video"  style="width: 11vw;">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/knife guy studio/22jan26/compressed_knifeguy 22jan26 VID2 exp1 (compressed).mp4" type="video/mp4" preload="metadata">
+          <source src="video/knife guy studio/22jan26/compressed50_compressed_knifeguy 22jan26 VID2 exp1 (compressed).mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
   
       <div class="project-info hidden spnr-video-position custom-size-video" style="width: 11vw;">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/knife guy studio/22jan26/compressed_knifeguy 22jan26 VID3 exp3.mp4" type="video/mp4" preload="metadata">
+          <source src="video/knife guy studio/22jan26/compressed50_compressed_knifeguy 22jan26 VID3 exp3.mp4" type="video/mp4" preload="metadata">
         </video>
       </div>
   
       <div class="project-info hidden spnr-video-position custom-size-video" style="width: 11vw;">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/knife guy studio/10mar26/compressed_KnifeGuyStudio 10.03.26 S1 final.mp4" type="video/mp4" preload="metadata">
+          <source src="video/knife guy studio/10mar26/compressed50_compressed_KnifeGuyStudio 10.03.26 S1 final.mp4"type="video/mp4" preload="metadata">
         </video>
       </div>
 
       <div class="project-info hidden carousel-container" style="width: 11vw;">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/knife guy studio/10mar26/petty/_DSC7578_compressed.jpg" class="active">
-            <img src="images/knife guy studio/10mar26/petty/_DSC7593_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/petty/_DSC7599_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/petty/_DSC7610_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/petty/_DSC7620_compressed.jpg" style="display:none;">
+            <img src="images/knife guy studio/10mar26/petty/_DSC7578_compressed.webp" class="active">
+            <img src="images/knife guy studio/10mar26/petty/_DSC7593_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/petty/_DSC7599_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/petty/_DSC7610_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/petty/_DSC7620_compressed.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -493,11 +516,11 @@
       
       <div class="project-info hidden carousel-container" style="width: 11vw;">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/knife guy studio/10mar26/large/_DSC7683_compressed.jpg" class="active">
-            <img src="images/knife guy studio/10mar26/large/_DSC7688_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/large/_DSC7710_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/large/_DSC7715_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/large/_DSC7741_compressed.jpg" style="display:none;">
+            <img src="images/knife guy studio/10mar26/large/_DSC7683_compressed.webp" class="active">
+            <img src="images/knife guy studio/10mar26/large/_DSC7688_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/large/_DSC7710_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/large/_DSC7715_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/large/_DSC7741_compressed.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -507,10 +530,10 @@
 
       <div class="project-info hidden carousel-container" style="width: 11vw;">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand1.jpg" class="active">
-            <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand12.jpg" style="display:none;">
-            <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand14.jpg" style="display:none;">
-            <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand18.jpg" style="display:none;">
+            <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand1.webp" class="active">
+            <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand12.webp" style="display:none;">
+            <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand14.webp" style="display:none;">
+            <img src="images/knife guy studio/26nov23/knife in hand/compressed_KnifeInHand18.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -520,10 +543,10 @@
       
       <div class="project-info hidden carousel-container" style="width: 11vw;">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/knife guy studio/26nov23/the rest/compressed__DSC8343.jpeg" class="active">
-            <img src="images/knife guy studio/26nov23/the rest/compressed__DSC8372.jpeg" style="display:none;">
-            <img src="images/knife guy studio/26nov23/the rest/compressed__DSC8980.jpeg" style="display:none;">
-            <img src="images/knife guy studio/26nov23/the rest/compressed__DSC9003.jpeg" style="display:none;">
+            <img src="images/knife guy studio/26nov23/the rest/compressed__DSC8343.webp" class="active">
+            <img src="images/knife guy studio/26nov23/the rest/compressed__DSC8372.webp" style="display:none;">
+            <img src="images/knife guy studio/26nov23/the rest/compressed__DSC8980.webp" style="display:none;">
+            <img src="images/knife guy studio/26nov23/the rest/compressed__DSC9003.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -533,9 +556,9 @@
 
       <div class="project-info hidden carousel-container" style="width: 14vw;">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/knife guy studio/10mar26/cleaver/_DSC7629_compressed.jpg" class="active">
-            <img src="images/knife guy studio/10mar26/cleaver/_DSC7664_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/cleaver/_DSC7675 copy_compressed.jpg" style="display:none;">
+            <img src="images/knife guy studio/10mar26/cleaver/_DSC7629_compressed.webp" class="active">
+            <img src="images/knife guy studio/10mar26/cleaver/_DSC7664_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/cleaver/_DSC7675 copy_compressed.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -545,10 +568,10 @@
 
       <div class="project-info hidden carousel-container" style="width: 14vw;">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/knife guy studio/10mar26/groups/_DSC7779_compressed.jpg" class="active">
-            <img src="images/knife guy studio/10mar26/groups/_DSC7789_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/groups/_DSC7807 copy_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/groups/_DSC7825_compressed.jpg" style="display:none;">
+            <img src="images/knife guy studio/10mar26/groups/_DSC7779_compressed.webp" class="active">
+            <img src="images/knife guy studio/10mar26/groups/_DSC7789_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/groups/_DSC7807 copy_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/groups/_DSC7825_compressed.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -558,11 +581,10 @@
 
       <div class="project-info hidden carousel-container" style="width: 14vw;">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/knife guy studio/10mar26/b&w/_DSC7854_compressed.jpg" class="active">
-            <img src="images/knife guy studio/10mar26/b&w/_DSC7857_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/b&w/_DSC7877 copy copy_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/b&w/_DSC7929_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/b&w/_DSC7935 copy_compressed.jpg" style="display:none;">
+            <img src="images/knife guy studio/10mar26/b&w/_DSC7854_compressed.webp" class="active">
+            <img src="images/knife guy studio/10mar26/b&w/_DSC7857_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/b&w/_DSC7877 copy copy_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/b&w/_DSC7929_compressed.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -572,11 +594,11 @@
 
       <div class="project-info hidden carousel-container" style="width: 14vw;">
         <div style="position: relative;"> <div class="carousel-slides" loading="lazy">
-            <img src="images/knife guy studio/10mar26/breadknife/_DSC7515_compressed.jpg" class="active">
-            <img src="images/knife guy studio/10mar26/breadknife/_DSC7516_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/breadknife/_DSC7526_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/breadknife/_DSC7534_compressed.jpg" style="display:none;">
-            <img src="images/knife guy studio/10mar26/breadknife/_DSC7542_compressed.jpg" style="display:none;">
+            <img src="images/knife guy studio/10mar26/breadknife/_DSC7515_compressed.webp" class="active">
+            <img src="images/knife guy studio/10mar26/breadknife/_DSC7516_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/breadknife/_DSC7526_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/breadknife/_DSC7534_compressed.webp" style="display:none;">
+            <img src="images/knife guy studio/10mar26/breadknife/_DSC7542_compressed.webp" style="display:none;">
           </div>
           
           <div class="fullscreen-btn" title="Open Fullscreen">⛶</div>
@@ -593,7 +615,7 @@
       <p2>2025</p2>
 
         <div class="project-content">
-        <img src="images/au/AU title image.png" class="project-image"
+        <img src="images/au/AU title image.webp" class="project-image"
         style="--img-height: auto;">
      </div>
 
@@ -606,53 +628,53 @@
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 10_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 10_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 12_1.jpeg" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 12_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 11_1.jpeg" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 11_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 2_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 2_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 3_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 3_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 4_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 4_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 5_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 5_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 6_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 6_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 7_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 7_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 8_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 8_1.webp" loading="lazy">
       </div>
 
      <div class="project-info hidden" style="width: 12vw;">
-        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 9_1.png" loading="lazy">
+        <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged) 9_1.webp" loading="lazy">
       </div>
       
       <div class="project-info hidden playlist-link-position" 
               style="width: 18vw !important;">
-        <a href="pdfs/Aarhus Design Guide DIGITAL.pdf" target="_blank" class="yt-link-wrapper pdf-thumb-fix">
-          <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged)_1.png" class="yt-thumb" alt="Aarhus Design Guide" loading="lazy">
+        <a href="pdfs/Aarhus Design Guide DIGITAL (web).pdf" target="_blank" class="yt-link-wrapper pdf-thumb-fix">
+          <img src="images/au/image_Aarhus Design Guide DIGITAL (dragged)_1.webp" class="yt-thumb" alt="Aarhus Design Guide" loading="lazy">
           
           <div class="play-overlay">
               <p>open the interactive pdf!</p>
@@ -682,7 +704,7 @@
       <p2>2025</p2>
   
       <div class="project-content">
-        <img src="images/dskd fashion show/dskd fashion show title pic2.jpg" class="project-image">
+        <img src="images/dskd fashion show/dskd fashion show title pic2.webp" class="project-image">
       </div>
   
       <div class="project-info hidden project-info-text spnr-text-position">
@@ -691,7 +713,7 @@
   
       <div class="project-info hidden spnr-video-position custom-size-video">
         <video autoplay loop muted playsinline controls class="video-shown">
-          <source src="video/dskd fashion show/RPReplay_Final1755112955.mp4" type="video/mp4">
+          <source src="video/dskd fashion show/compressed_RPReplay_Final1755112955.mp4" type="video/mp4">
         </video>
                 <video autoplay loop muted playsinline controls class="video-shown">
           <source src="video/dskd fashion show/compressed_RPReplay_Final1755113846.mp4" type="video/mp4">
@@ -740,7 +762,7 @@
           <p2>2022-Ongoing</p2>
 
           <div class="project-content">
-            <img src="images/music/bj glow.jpeg" class="project-image">
+            <img src="images/music/bj glow.webp" class="project-image">
           </div>
 
                 <div class="project-info hidden project-info-text spnr-text-position">
@@ -793,7 +815,7 @@
             <div class="project-info hidden" style="width: 400px; padding: 0;">
               <a href="https://www.youtube.com/watch?v=NlWVJr9otCg" target="_blank" class="yt-link-wrapper">
                 <div class="video-container">
-                  <img src="https://img.youtube.com/vi/NlWVJr9otCg/maxresdefault.jpg" class="yt-thumb" alt="Watch on YouTube">
+                  <img src="https://img.youtube.com/vi/NlWVJr9otCg/maxresdefault.webp" class="yt-thumb" alt="Watch on YouTube">
                   
                   <div class="play-overlay">
                     <span class="play-icon">▶</span>
@@ -812,7 +834,7 @@
     <div id="info">
 
       <div class="info-content">
-      <img src="images/lander/IMG_5383.jpeg" alt="Info Image" class="info-image">
+      <img src="images/info/IMG_5383.webp" alt="Info Image" class="info-image">
       <h2>info / archive</h2>
       <p>Bjarki Björnsson is a Copenhagen-based creative and curator known for his distinct aesthetic that bridges the worlds of underground music, fashion, and digital archiving. Through his various platforms, he functions as a digital tastemaker, sharing a mix of obscure visual media, nostalgic film photography, and eclectic soundscapes. His work often focuses on preserving internet subcultures and promoting alternative media, making him a central figure for those interested in high-concept style and niche cultural discovery.</p>
           <p>© 2026 Bjarki Björnsson</p>
