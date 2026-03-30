@@ -286,8 +286,7 @@ footer p, footer a { pointer-events: auto; }
 
 #lightbox {
   position: fixed !important; /* Force it to stay on the screen */
-  top: 0 !important;
-  left: 0 !important;
+  inset: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
   
@@ -319,12 +318,51 @@ footer p, footer a { pointer-events: auto; }
   user-select: none;
   display: block;
   z-index: 1000000;
+  cursor: pointer;
+}
+
+#lightbox img.lightbox-content {
+  max-width: 90vw;
+  max-height: 85vh;
+}
+
+#lightbox video.lightbox-content {
+  max-width: 90vw;
+  max-height: 85vh;
+  width: auto;
+  height: auto;
 }
 
 /* Hide when not active */
 #lightbox.hidden {
   display: none !important;
   pointer-events: none;
+}
+
+/* Close Button */
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #111;
+  background: rgba(244, 244, 244, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000001;
+  transition: all 0.2s ease;
+}
+
+.lightbox-close:hover {
+  background: #fff;
+  transform: rotate(90deg) scale(1.1);
 }
 
 /* Custom cursor for the big image in the Lightbox when it's a carousel */
@@ -335,8 +373,7 @@ footer p, footer a { pointer-events: auto; }
 #lightbox:not(.hidden) {
     display: flex !important;
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
+    inset: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
     z-index: 9999999 !important; /* Move it even higher */
@@ -728,3 +765,12 @@ footer p, footer a { pointer-events: auto; }
     }
 }
 
+video {
+    background: #f4f4f4; /* Match your page background */
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+video.loaded {
+    opacity: 1;
+}

@@ -51,8 +51,8 @@ function setupHeroInteraction() {
   const heroContainer = document.getElementById('hero-container');
   if (!heroContainer) return;
 
-  const cursorPlaying = "url('cursors/play1.png'), auto"; 
-  const cursorPaused = "url('cursors/pause1.png'), auto";
+  const cursorPlaying = "url('cursors/playblend1.webp'), auto"; 
+  const cursorPaused = "url('cursors/pauseblend1.webp'), auto";
   heroContainer.style.cursor = cursorPlaying;
 
   heroContainer.addEventListener('mousemove', (e) => {
@@ -142,49 +142,16 @@ function randomizeProjectElement(projectDiv, el) {
   el.style.top = `${Math.floor(Math.random() * maxY) + margin}px`;
 }
 
-// --- 5. LIGHTBOX & CAROUSEL SYNC ---
+// --- 5. CAROUSEL ONLY (No Lightbox) ---
 
-function setupLightbox() {
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  if (!lightbox || !lightboxImg) return;
-
-  let activeCarousel = null;
-
+function setupCarousel() {
   document.addEventListener('click', (e) => {
     const el = e.target;
     
     // Stop propagation if clicking inside project info to prevent chaos reshuffle
     if (el.closest('.project-info')) e.stopPropagation();
     
-    // 1. FULLSCREEN BUTTON
-    if (el.classList.contains('fullscreen-btn')) {
-      activeCarousel = el.closest('.carousel-container');
-      const activeImg = activeCarousel.querySelector('img.active') || activeCarousel.querySelector('img[style*="block"]');
-      if (activeImg) openLightbox(activeImg);
-      return;
-    }
-
-    // 2. LIGHTBOX IMAGE CLICK (Carousel Sync)
-    if (!lightbox.classList.contains('hidden') && el.id === 'lightbox-img' && activeCarousel) {
-      const slides = Array.from(activeCarousel.querySelectorAll('.carousel-slides img'));
-      let currentIndex = slides.findIndex(img => img.classList.contains('active') || img.style.display === 'block');
-      
-      slides[currentIndex].classList.remove('active');
-      slides[currentIndex].style.display = 'none';
-      
-      currentIndex = (currentIndex + 1) % slides.length;
-      const nextImg = slides[currentIndex];
-      
-      nextImg.classList.add('active');
-      nextImg.style.display = 'block';
-      
-      // Update the Lightbox view to match the new slide
-      lightboxImg.src = nextImg.src; 
-      return;
-    }
-
-    // 3. ON-PAGE CAROUSEL CLICK
+    // Handle carousel clicks - advance to next image
     const carouselContainer = el.closest('.carousel-container');
     if (carouselContainer && el.tagName === 'IMG' && !el.classList.contains('fullscreen-btn')) {
         const slides = Array.from(carouselContainer.querySelectorAll('.carousel-slides img'));
@@ -196,46 +163,150 @@ function setupLightbox() {
         slides[currentIndex].style.display = 'block';
         return;
     }
+  });
+}
 
-    // 4. OPEN LIGHTBOX (Standard Images/Videos)
+// --- 6. NEW LIGHTBOX IMPLEMENTATION ---
+
+function setupNewLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  if (!lightbox) return;
+
+  let activeCarousel = null;
+  let activeElement = null;
+
+  document.addEventListener('click', (e) => {
+    const el = e.target;
+
+    // Stop propagation if clicking inside project info to prevent chaos reshuffle
+    if (el.closest('.project-info')) e.stopPropagation();
+    
+    // Stop propagation if clicking inside lightbox to prevent interference
+    if (el.closest('#lightbox')) e.stopPropagation();
+
+    // Fullscreen button opens lightbox
+    if (el.classList.contains('fullscreen-btn')) {
+      activeCarousel = el.closest('.carousel-container');
+      const activeImg = activeCarousel.querySelector('img.active') || activeCarousel.querySelector('img[style*="block"]');
+      if (activeImg) openLightbox(activeImg);
+      return;
+    }
+
+    // Clickable images/videos in project-info (but not carousels)
     const isProjectInfoChild = el.closest('.project-info');
+    const carouselContainer = el.closest('.carousel-container');
     if (isProjectInfoChild && !carouselContainer) {
       if (el.tagName === 'IMG' || el.classList.contains('image-video-lightbox-fix')) {
-        activeCarousel = null; 
+        activeCarousel = null;
+        activeElement = el;
         openLightbox(el);
+      }
+    }
+
+    // Clicking lightbox image cycles to next carousel slide (if in carousel mode)
+    if (!lightbox.classList.contains('hidden') && activeCarousel) {
+      if (el.id === 'lightbox-img' || el.classList.contains('lightbox-content')) {
+        cycleCarouselSlide();
       }
     }
   });
 
   function openLightbox(el) {
+    // Clear old content
     const oldVid = lightbox.querySelector('video');
     if (oldVid) oldVid.remove();
+    const oldImg = lightbox.querySelector('img#lightbox-img');
+    if (oldImg) oldImg.remove();
 
+    // Add new content
     if (el.tagName === 'IMG') {
-      lightboxImg.src = el.src; // CRITICAL: This sets the image
-      lightboxImg.classList.remove('hidden');
-    } else {
-      lightboxImg.classList.add('hidden');
-      const lbVideo = document.createElement('video');
-      lbVideo.src = el.querySelector('source')?.src || el.src;
-      lbVideo.autoplay = lbVideo.loop = lbVideo.muted = lbVideo.playsInline = true;
-      lbVideo.classList.add('lightbox-content');
-      lightbox.appendChild(lbVideo);
+      const img = document.createElement('img');
+      img.id = 'lightbox-img';
+      img.src = el.src;
+      img.classList.add('lightbox-content');
+      lightbox.appendChild(img);
+    } else if (el.tagName === 'VIDEO' || el.classList.contains('image-video-lightbox-fix')) {
+      const video = document.createElement('video');
+      video.id = 'lightbox-vid';
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.classList.add('lightbox-content');
+      
+      // Get source from the element
+      const sourceEl = el.querySelector('source');
+      if (sourceEl && sourceEl.src) {
+        video.src = sourceEl.src;
+      } else if (el.src) {
+        video.src = el.src;
+      } else if (el.dataset.src) {
+        video.src = el.dataset.src;
+      }
+      
+      lightbox.appendChild(video);
     }
-    
+
     lightbox.classList.remove('hidden');
-    // Ensure the lightbox is scrolled to the top of its own container
-    lightbox.scrollTop = 0; 
     document.body.style.overflow = 'hidden';
   }
 
+  function cycleCarouselSlide() {
+    if (!activeCarousel) return;
+    
+    const slides = Array.from(activeCarousel.querySelectorAll('.carousel-slides img'));
+    let currentIndex = slides.findIndex(img => img.classList.contains('active') || img.style.display === 'block');
+    
+    slides[currentIndex].classList.remove('active');
+    slides[currentIndex].style.display = 'none';
+    
+    currentIndex = (currentIndex + 1) % slides.length;
+    const nextImg = slides[currentIndex];
+    
+    nextImg.classList.add('active');
+    nextImg.style.display = 'block';
+    
+    // Update lightbox to show new image
+    const lightboxImg = lightbox.querySelector('#lightbox-img');
+    if (lightboxImg) {
+      lightboxImg.src = nextImg.src;
+    }
+  }
+
+  // Handle lightbox interactions
   lightbox.addEventListener('click', (e) => {
-    // Only close if clicking the background, not the image/video
-    if (!e.target.classList.contains('lightbox-content')) {
-      lightbox.classList.add('hidden');
-      document.body.style.overflow = 'auto';
-      activeCarousel = null;
-      lightboxImg.src = ""; // Clear source on close
+    const isContent = e.target.classList.contains('lightbox-content');
+    const isCloseButton = e.target.classList.contains('lightbox-close');
+    
+    // Close button or clicking background (not content)
+    if (isCloseButton || (!isContent && !e.target.closest('.lightbox-content'))) {
+      closeLightbox();
+      return;
+    }
+    
+    // Clicking content (image/video) in carousel mode - advance slide
+    if (isContent && activeCarousel) {
+      cycleCarouselSlide();
+    }
+  });
+
+  function closeLightbox() {
+    lightbox.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    activeCarousel = null;
+    activeElement = null;
+    
+    // Clear content
+    const oldVid = lightbox.querySelector('video');
+    if (oldVid) oldVid.remove();
+    const oldImg = lightbox.querySelector('img#lightbox-img');
+    if (oldImg) oldImg.remove();
+  }
+
+  // Close on ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+      closeLightbox();
     }
   });
 }
@@ -252,7 +323,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initAllElements(); 
   setupHeroInteraction();
   setupProjectInteractions(); 
-  setupLightbox(); 
+  setupCarousel();
+  setupNewLightbox();
   
   if (typeof p5 !== 'undefined') new p5(sketch);
 
@@ -276,7 +348,7 @@ window.addEventListener('scroll', () => {
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrollPercent = (scrollTop / scrollHeight) * 100;
 
-    if (scrollPercent >= 98) { // Trigger slightly early for reliability
+    if (scrollPercent >= 90) { // Trigger slightly early for reliability
         if (!isAtBottom) {
             isAtBottom = true;
             console.log("At bottom! Starting 2-second portal timer...");
@@ -347,4 +419,35 @@ window.addEventListener('mousemove', (e) => {
         portal.style.setProperty('--rotX', `${rotateX}deg`);
         portal.style.setProperty('--rotY', `${rotateY}deg`);
     }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const lazyVideos = document.querySelectorAll("video.lazy-video");
+
+    const videoObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(videoEntry => {
+            // Check if the video is now visible on screen
+            if (videoEntry.isIntersecting) {
+                const video = videoEntry.target;
+                const source = video.querySelector("source");
+
+                // Move the data-src to the actual src
+                source.src = video.dataset.src;
+                video.load(); // Tell the browser to start the download
+                
+                video.classList.add("loaded");
+                
+                // Stop watching this video once it's loaded
+                observer.unobserve(video);
+            }
+        });
+    }, {
+        // This 'rootMargin' triggers the download 200px BEFORE the video 
+        // actually enters the screen, so it's ready by the time they get there.
+        rootMargin: "0px 0px 200px 0px" 
+    });
+
+    lazyVideos.forEach(video => {
+        videoObserver.observe(video);
+    });
 });
