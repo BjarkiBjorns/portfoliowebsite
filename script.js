@@ -167,6 +167,26 @@ function setupCarousel() {
   });
 }
 
+// --- 6. MOBILE SCROLL RANDOMIZATION ---
+
+function setupMobileScrollRandomization() {
+  // Only run on mobile devices (viewport width <= 768px)
+  if (window.innerWidth > 768) return;
+
+  let lastScrollY = 0;
+  const scrollThreshold = 5;
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Only trigger if scrolled more than the threshold to avoid excessive randomization
+    if (Math.abs(currentScrollY - lastScrollY) > scrollThreshold) {
+      initAllElements();
+      lastScrollY = currentScrollY;
+    }
+  });
+}
+
 
 
 
@@ -182,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupHeroInteraction();
   setupProjectInteractions(); 
   setupCarousel();
+  setupMobileScrollRandomization();
   
   if (typeof p5 !== 'undefined') new p5(sketch);
 

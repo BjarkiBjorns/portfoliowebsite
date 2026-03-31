@@ -702,3 +702,139 @@ video.loaded {
     opacity: 1;
 }
 
+/* ============================================================ */
+/* MOBILE RESPONSIVE DESIGN - max-width: 768px                */
+/* ============================================================ */
+
+@media (max-width: 768px) {
+  /* === 1. TYPOGRAPHY & TEXT === */
+  h1, h2 {
+    font-size: 2rem !important;
+  }
+
+  h3, p2, p3, p, a {
+    font-size: 1rem !important;
+  }
+
+  .info-content {
+    width: 90vw !important;
+    font-size: 1rem !important;
+  }
+
+  .info-content p {
+    font-size: 1rem !important;
+  }
+
+  /* === 2. DISABLE SCATTER EFFECT & PROJECT LAYOUT === */
+  .project-info {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 90vw !important;
+    margin: 0 auto 1.5rem auto !important;
+    box-shadow: 3px 2px 7px 4px rgba(0, 0, 0, 0.1) !important;
+    max-width: 95vw !important;
+  }
+
+  .project-info-text {
+    max-width: 100% !important;
+  }
+
+  .project-content {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    max-width: 95vw !important;
+  }
+
+  .project {
+    margin-bottom: 3rem !important;
+  }
+
+  .project h2 {
+    max-width: 95vw !important;
+  }
+
+  /* === 3. MEDIA & ELEMENTS CONSTRAINTS === */
+  .custom-size-video,
+  .custom-size-video-instagram,
+  .yt-link-wrapper,
+  .carousel-container,
+  .audio-player-position {
+    width: 90vw !important;
+    max-width: 100% !important;
+  }
+
+  audio {
+    width: 90vw !important;
+  }
+
+  .custom-soaf-photo img {
+    width: 100% !important;
+  }
+
+  .project-image {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* === 4. NAVIGATION & HERO === */
+  .navigation {
+    gap: 1rem !important;
+    height: 60px !important;
+  }
+
+  .navigation a {
+    font-size: 1.2rem !important;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem !important;
+  }
+
+  .hero-content p {
+    font-size: 1rem !important;
+  }
+
+  .hero-content p2 {
+    font-size: 0.9rem !important;
+  }
+
+  /* === 5. LAB PAGE CONTROLS === */
+
+  #lab-controls {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    width: 90% !important;
+    bottom: 15px !important;
+    gap: 10px !important;
+  }
+
+  .control-btn {
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+  }
+
+  /* === 6. MISCELLANEOUS MOBILE TWEAKS === */
+  .spnr-text-position,
+  .playlist-link-position,
+  .spnr-video-position {
+    top: auto !important;
+    left: auto !important;
+    position: relative !important;
+  }
+
+  footer {
+    padding: 1rem 1rem !important;
+  }
+
+  footer p {
+    font-size: 0.4rem !important;
+  }
+
+  .concept-line {
+    margin-bottom: 2rem !important;
+  }
+}
+
+.mobile-hide { display: none !important; }
