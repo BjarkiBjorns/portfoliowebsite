@@ -110,7 +110,7 @@ h3, p2 { font-size: 10pt; margin: 0; line-height: 2; font-style: italic; }
 p { font-size: 0.65vw;}
 p2 { color: #b4b4b4; font-size: 0.65vw;}
 p3 { font-size: 10pt; margin: 0; line-height: 0; font-style: italic;}
-a {font-size: 0.7vw;}
+a {font-size: 0.6vw;}
 
 /* --- Project Logic --- */
 
@@ -800,6 +800,10 @@ video.loaded {
     font-size: 0.9rem !important;
   }
 
+   #random-video #random-video2, #random-video3, #random-video4, #random-image, #random-image2, #random-image3 {
+    width: 13vw !important;
+  }
+
   /* === 5. LAB PAGE CONTROLS === */
 
   #lab-controls {
@@ -835,6 +839,16 @@ video.loaded {
   .concept-line {
     margin-bottom: 2rem !important;
   }
+
+  .mobile-hide { 
+    display: none !important; 
+  }
+
+  .mobile-disp-block {
+    display: block !important;
+  }
 }
 
-.mobile-hide { display: none !important; }
+  .desktop-hide { 
+    display: none; 
+  }
