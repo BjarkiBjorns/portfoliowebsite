@@ -1,7 +1,7 @@
 let labSettings = {
     circleCount: 1,
     spread: 0,
-    strokeWeight: 1,
+    strokeWeight: 0.5,
     isPaused: false,
     shape: 'circle',
     isDarkMode: false // NEW
@@ -29,7 +29,7 @@ p.draw = () => {
 
 
         let distToCenter = p.dist(p.mouseX, p.mouseY, p.width/2, p.height/2);
-        let size = p.map(distToCenter, 0, p.width/2, 800, 50);
+        let size = p.map(distToCenter, 0, p.width/2, 300, 30);
 
         for (let i = 0; i < labSettings.circleCount; i++) {
             let offsetX = p.random(-labSettings.spread, labSettings.spread);
@@ -84,7 +84,7 @@ p.draw = () => {
 function saveArt() {
   // 1. If we are in Light Mode, just save normally and stop.
   if (!labSettings.isDarkMode) {
-    myLab.saveCanvas('bjarki-creation', 'jpg');
+    myLab.saveCanvas('from bjarkis lab', 'jpg');
     return;
   }
 
@@ -115,7 +115,7 @@ function saveArt() {
   myLab.updatePixels();
 
   // 5. Save the actually-inverted image
-  myLab.saveCanvas('bjarki-creation-dark', 'jpg');
+  myLab.saveCanvas('from bjarkis lab', 'jpg');
 
   // 6. Optional: Immediately flip it back to Light mode
   // so the user can continue drawing without a weird flash.
@@ -157,7 +157,7 @@ function updateMode(mode) {
     else if (mode === 'spray') {
         // We increase these numbers to create the "cluster" effect
         labSettings.circleCount = 5; 
-        labSettings.spread = 15;      
+        labSettings.spread = 20;      
         labSettings.strokeWeight = 0.5; // Thinner lines look better in spray mode
     }
 }

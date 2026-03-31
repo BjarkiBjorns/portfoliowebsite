@@ -205,7 +205,7 @@ window.addEventListener('scroll', () => {
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrollPercent = (scrollTop / scrollHeight) * 100;
 
-    if (scrollPercent >= 90) { // Trigger slightly early for reliability
+    if (scrollPercent >= 98) { // Trigger slightly early for reliability
         if (!isAtBottom) {
             isAtBottom = true;
             console.log("At bottom! Starting 2-second portal timer...");
