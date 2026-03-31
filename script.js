@@ -315,6 +315,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 video.classList.add("loaded");
                 
+                // Safari-specific fix: Attempt autoplay with proper error handling
+                // Check if video is ready to play immediately
+                if (video.readyState >= 3) {
+                    // canplay or canplaythrough event has fired
+                    video.play().catch(error => {
+                        // Silent catch for Safari power-saver mode errors
+                        console.debug('Video autoplay prevented:', error);
+                    });
+                } else {
+                    // Wait for video to be ready before attempting autoplay
+                    video.addEventListener('canplay', function playOnReady() {
+                        video.play().catch(error => {
+                            console.debug('Video autoplay prevented:', error);
+                        });
+                        video.removeEventListener('canplay', playOnReady);
+                    }, { once: true });
+                }
+                
                 // Stop watching this video once it's loaded
                 observer.unobserve(video);
             }

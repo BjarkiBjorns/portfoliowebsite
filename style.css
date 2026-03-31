@@ -693,9 +693,12 @@ footer p, footer a { pointer-events: auto; font-size: 0.55vw;}
 }
 
 video {
-    background: #f4f4f4; /* Match your page background */
+    background: #f4f4f4;
     transition: opacity 0.5s ease;
     opacity: 0;
+    /* Safari fix for rounded corners and ghosting artifacts */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
 }
 
 video.loaded {
