@@ -128,7 +128,7 @@ a {font-size: 0.6vw;}
 }
 
 .project-info {
-  position: absolute;
+  position: absolute !important;
   z-index: 1;
   width: auto; 
   pointer-events: auto;
@@ -157,10 +157,15 @@ a {font-size: 0.6vw;}
   display: none;
 }
 
-.project h2, .project .project-content {
+.project .project-content {
   max-width: 20vw;
   margin: 0 auto;
   cursor: url('cursors/clickcursor.webp'), auto !important;
+}
+
+.project h2{
+  max-width: 20vw;
+  margin: 0 auto;
 }
 
 .project p {
@@ -703,6 +708,212 @@ video {
 
 video.loaded {
     opacity: 1;
+}
+
+/* ============================================================ */
+/* LIGHTBOX MODAL */
+/* ============================================================ */
+
+#lightbox-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+#lightbox-modal.lightbox-hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+#lightbox-modal.lightbox-visible {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.lightbox-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(238, 238, 238, 0.85);
+  z-index: 1;
+  backdrop-filter: blur(10px);
+}
+
+.lightbox-container {
+  position: relative;
+  z-index: 10;
+  max-height: 90vh;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-media-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 85vh;
+  max-width: 85vw;
+}
+
+#lightbox-content {
+  max-height: 85vh;
+  max-width: 85vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#lightbox-content img,
+#lightbox-content video {
+  max-height: 85vh;
+  max-width: 85vw;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  display: block;
+}
+
+#lightbox-content video {
+  background: #000;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(244, 244, 244, 0.9);
+  color: #111;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 32px;
+  cursor: pointer;
+  z-index: 20;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.lightbox-close:hover {
+  background: #f4f4f4;
+  transform: scale(1.1);
+  cursor: url('cursors/clickcursor.webp'), pointer !important;
+}
+
+.lightbox-carousel-controls {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  gap: 15px;
+  z-index: 20;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  background: rgba(244, 244, 244, 0.9);
+  color: #111;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: url('cursors/clickcursor.webp'), w-resize !important;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  background: #f4f4f4;
+  transform: scale(1.1);
+}
+
+/* Fullscreen button for project-info images/videos */
+.project-info .fullscreen-btn {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(244, 244, 244, 0.9);
+  color: #111;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 1010;
+  transition: background 0.2s;
+}
+
+.project-info:hover .fullscreen-btn {
+  display: block;
+}
+
+.project-info .fullscreen-btn:hover {
+  background: #fff;
+  transform: scale(1.1);
+}
+
+/* Mobile-specific lightbox adjustments */
+@media (max-width: 768px) {
+  #lightbox-modal.lightbox-visible {
+    padding: 10px;
+  }
+  
+  .lightbox-container {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+
+  .lightbox-media-wrapper {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+
+  #lightbox-content img,
+  #lightbox-content video {
+    max-height: 85vh;
+    max-width: 95vw;
+  }
+
+  .lightbox-close {
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 28px;
+    cursor: url("cursors/clickcursor.webp"), pointer !important;
+  }
+
+  .lightbox-carousel-controls {
+    bottom: 10px;
+    gap: 10px;
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    padding: 8px 12px;
+    font-size: 16px;
+  }
+
+  .project-info .fullscreen-btn {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 14px;
+    bottom: 5px;
+    right: 5px;
+  }
 }
 
 /* ============================================================ */

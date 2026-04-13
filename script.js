@@ -89,7 +89,10 @@ function setupProjectInteractions() {
     const image = project.querySelector('.project-image');
     if (!image) return;
 
-    image.addEventListener('click', () => {
+    image.addEventListener('click', (e) => {
+      // Don't trigger scatter if clicking a fullscreen button
+      if (e.target.classList.contains('fullscreen-btn')) return;
+      
       const infoElements = project.querySelectorAll('.project-info');
       if (infoElements.length === 0) return;
       
@@ -149,6 +152,9 @@ function setupCarousel() {
   document.addEventListener('click', (e) => {
     const el = e.target;
     
+    // Prevent interference if clicking a fullscreen button
+    if (el.classList.contains('fullscreen-btn')) return;
+    
     // Stop propagation if clicking inside project info to prevent chaos reshuffle
     if (el.closest('.project-info')) e.stopPropagation();
     
@@ -191,6 +197,159 @@ function setupMobileScrollRandomization() {
 
 
 
+
+// --- 6. LIGHTBOX MODULE ---
+
+class LightboxManager {
+  constructor() {
+    this.modal = document.getElementById('lightbox-modal');
+    this.contentDiv = document.getElementById('lightbox-content');
+    this.closeBtn = document.querySelector('.lightbox-close');
+    this.prevBtn = document.querySelector('.lightbox-prev');
+    this.nextBtn = document.querySelector('.lightbox-next');
+    this.carouselControls = document.getElementById('lightbox-carousel-controls');
+    
+    this.currentMediaGroup = null; // Array of media items in a carousel or single item
+    this.currentIndex = 0;
+    this.isCarousel = false;
+    
+    this.setupEventListeners();
+  }
+
+  setupEventListeners() {
+    this.closeBtn.addEventListener('click', () => this.close());
+    this.modal.addEventListener('click', (e) => {
+      if (e.target === this.modal || e.target === document.querySelector('.lightbox-overlay')) {
+        this.close();
+      }
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.modal.classList.contains('lightbox-visible')) {
+        this.close();
+      }
+      if (e.key === 'ArrowLeft' && this.modal.classList.contains('lightbox-visible') && this.isCarousel) {
+        this.prevSlide();
+      }
+      if (e.key === 'ArrowRight' && this.modal.classList.contains('lightbox-visible') && this.isCarousel) {
+        this.nextSlide();
+      }
+    });
+    
+    this.prevBtn.addEventListener('click', () => this.prevSlide());
+    this.nextBtn.addEventListener('click', () => this.nextSlide());
+  }
+
+  open(element) {
+    // Determine if this is a carousel or standalone media
+    const projectInfo = element.closest('.project-info');
+    if (!projectInfo) return;
+    
+    const parentProject = projectInfo.closest('.project');
+    if (!parentProject) return;
+
+    // Check if this is part of a carousel
+    const isPartOfCarousel = projectInfo.classList.contains('carousel-container');
+    
+    if (isPartOfCarousel) {
+      // Handle carousel
+      const slides = Array.from(projectInfo.querySelectorAll('.carousel-slides img'));
+      this.currentMediaGroup = slides;
+      const activeIndex = slides.findIndex(img => img.classList.contains('active') || img.style.display === 'block');
+      this.currentIndex = activeIndex >= 0 ? activeIndex : 0;
+      this.isCarousel = true;
+      this.carouselControls.style.display = 'flex';
+    } else {
+      // Handle standalone image - collect ALL images from parent project's project-info divs
+      const allImages = Array.from(parentProject.querySelectorAll('.project-info img:not(.fullscreen-btn)'));
+      const img = projectInfo.querySelector('img:not(.fullscreen-btn)');
+      
+      if (img && allImages.length > 0) {
+        this.currentMediaGroup = allImages;
+        this.currentIndex = allImages.indexOf(img);
+        this.isCarousel = allImages.length > 1; // Enable carousel controls only if multiple images
+        this.carouselControls.style.display = allImages.length > 1 ? 'flex' : 'none';
+      } else if (img) {
+        this.currentMediaGroup = [img];
+        this.isCarousel = false;
+        this.carouselControls.style.display = 'none';
+      }
+      
+      if (this.currentIndex < 0) this.currentIndex = 0;
+    }
+
+    if (!this.currentMediaGroup || this.currentMediaGroup.length === 0) return;
+
+    this.displayMedia();
+    this.modal.classList.remove('lightbox-hidden');
+    this.modal.classList.add('lightbox-visible');
+    document.body.style.overflow = 'hidden';
+  }
+
+  close() {
+    this.modal.classList.remove('lightbox-visible');
+    this.modal.classList.add('lightbox-hidden');
+    document.body.style.overflow = 'auto';
+    this.contentDiv.innerHTML = '';
+    this.currentMediaGroup = null;
+  }
+
+  displayMedia() {
+    const media = this.currentMediaGroup[this.currentIndex];
+    this.contentDiv.innerHTML = '';
+
+    if (!media) return;
+
+    if (media.tagName === 'IMG') {
+      const img = document.createElement('img');
+      img.src = media.src;
+      img.alt = media.alt || 'Gallery image';
+      this.contentDiv.appendChild(img);
+    }
+  }
+
+  nextSlide() {
+    if (!this.isCarousel || !this.currentMediaGroup) return;
+    this.currentIndex = (this.currentIndex + 1) % this.currentMediaGroup.length;
+    this.displayMedia();
+  }
+
+  prevSlide() {
+    if (!this.isCarousel || !this.currentMediaGroup) return;
+    this.currentIndex = (this.currentIndex - 1 + this.currentMediaGroup.length) % this.currentMediaGroup.length;
+    this.displayMedia();
+  }
+}
+
+function setupLightbox() {
+  const lightbox = new LightboxManager();
+
+  // Add fullscreen buttons to all project-info images and carousels (but not in project-content)
+  document.querySelectorAll('.project-info:not(.project-content)').forEach(projectInfo => {
+    // Skip if it's a project-content image (which is the main image)
+    if (projectInfo.querySelector('.project-image')) return;
+
+    const img = projectInfo.querySelector('img:not(.fullscreen-btn)');
+
+    // For carousels - check if parent is a carousel-container
+    const isCarousel = projectInfo.classList.contains('carousel-container');
+
+    // For carousels and images only - add button (no videos)
+    if ((isCarousel || img) && !projectInfo.querySelector('.fullscreen-btn')) {
+      const btn = document.createElement('button');
+      btn.className = 'fullscreen-btn';
+      btn.innerHTML = '⛶';
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        lightbox.open(projectInfo);
+      });
+      projectInfo.style.position = 'relative';
+      projectInfo.appendChild(btn);
+    }
+  });
+}
+
 // --- 7. INITIALIZE ---
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -202,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupHeroInteraction();
   setupProjectInteractions(); 
   setupCarousel();
+  setupLightbox();
   setupMobileScrollRandomization();
   
   if (typeof p5 !== 'undefined') new p5(sketch);
